@@ -156,9 +156,16 @@ function getNextPaid($lastPaid,$type='next'){
 
     // Format the remaining time as hours:minutes
     $remainingTime = $timeUntilNextPayment->format('%h:%i');
+    if($percentage < 1){
+        $percent = 1;
+    }else if($percentage >=100){
+        $percent = 100;
+    }else{
+         $percent = $percentage;
+    }
     $data = [
         'next' => $nextPaidDate->format('Y-m-d H:i:s'),
-        'percent'   => round($percentage) < 1 ? 1:round($percentage),
+        'percent'   => $percent,
         'payin' => $remainingTime
     ];
     return $data[$type];

@@ -1,7 +1,16 @@
+@php
+    $mining = App\Models\Order::where('user_id', auth()->id())
+        ->with('miner')
+        ->orderBy('id', 'desc')
+        ->where('status', 1)
+        ->count();
+    $miningStatus = $mining < 1 ? true : false;
+@endphp
 <header class="header dashboard-header" id="header">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand logo" href="{{ route('home') }}"><img src="{{ siteLogo() }}" alt="@lang('image')"></a>
+            <a class="navbar-brand logo" href="{{ route('home') }}"><img src="{{ siteLogo() }}"
+                    alt="@lang('image')"></a>
             <div class="flex-align">
                 <div class="d-lg-none d-block">
                     <div class="language flex-align">
@@ -18,58 +27,93 @@
                         @endif
                     </div>
                 </div>
-                <button class="navbar-toggler header-button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler header-button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" type="button" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                     <span id="hiddenNav"><i class="las la-bars"></i></span>
                 </button>
             </div>
 
             <div class="navbar-collapse collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav nav-menu align-items-lg-center ms-auto">
+                    @if ($miningStatus)
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button"
+                                aria-expanded="false"> @lang('Mining') <span class="nav-item__icon"><i
+                                        class="las la-angle-down"></i></span></a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                        href="{{ route('user.plans') }}">@lang('Start Mining')</a></li>
+                                <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                        href="{{ route('user.plans.purchased') }}">@lang('Mining Tracks')</a>
+                                </li>
+                            </ul>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link @if (Route::is('user.plans.purchased')) active @endif" aria-current="page"
+                                href="{{ route('user.plans.purchased') }}">@lang('Mining')</a>
+                        </li>
+                    @endif
+
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"> @lang('Mining') <span class="nav-item__icon"><i class="las la-angle-down"></i></span></a>
+                        <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button"
+                            aria-expanded="false"> @lang('Withdraw') <span class="nav-item__icon"><i
+                                    class="las la-angle-down"></i></span></a>
                         <ul class="dropdown-menu">
-                            <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.plans') }}">@lang('Start Mining')</a></li>
-                            <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.plans.purchased') }}">@lang('Mining Tracks')</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"> @lang('Withdraw') <span class="nav-item__icon"><i class="las la-angle-down"></i></span></a>
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.withdraw') }}">@lang('Withdraw Now')</a></li>
-                            <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.withdraw.history') }}">@lang('My Withdrawals')</a>
+                            <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                    href="{{ route('user.withdraw') }}">@lang('Withdraw Now')</a></li>
+                            <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                    href="{{ route('user.withdraw.history') }}">@lang('My Withdrawals')</a>
                             </li>
                         </ul>
                     </li>
                     @if ($general->referral_system)
                         <li class="nav-item dropdown">
-                            <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"> @lang('Referral') <span class="nav-item__icon"><i class="las la-angle-down"></i></span></a>
+                            <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button"
+                                aria-expanded="false"> @lang('Referral') <span class="nav-item__icon"><i
+                                        class="las la-angle-down"></i></span></a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.referral') }}">@lang('My Referral')</a></li>
-                                <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.referral.log') }}">@lang('Referral Bonus Logs')</a>
+                                <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                        href="{{ route('user.referral') }}">@lang('My Referral')</a></li>
+                                <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                        href="{{ route('user.referral.log') }}">@lang('Referral Bonus Logs')</a>
                                 </li>
                             </ul>
                         </li>
                     @endif
                     <li class="nav-item dropdown">
-                        <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"> @lang('Support Ticket') <span class="nav-item__icon"><i class="las la-angle-down"></i></span></a>
+                        <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button"
+                            aria-expanded="false"> @lang('Support Ticket') <span class="nav-item__icon"><i
+                                    class="las la-angle-down"></i></span></a>
                         <ul class="dropdown-menu">
-                            <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('ticket.open') }}">@lang('Open Ticket')</a>
-                            <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('ticket.index') }}">@lang('All Tickets')</a></li>
+                            <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                    href="{{ route('ticket.open') }}">@lang('Open Ticket')</a>
+                            <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                    href="{{ route('ticket.index') }}">@lang('All Tickets')</a></li>
                     </li>
                 </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">@lang('My Account') <span class="nav-item__icon"><i class="las la-angle-down"></i></span></a>
+                    <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button"
+                        aria-expanded="false">@lang('My Account') <span class="nav-item__icon"><i
+                                class="las la-angle-down"></i></span></a>
                     <ul class="dropdown-menu">
-                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.wallets') }}">@lang('Wallets')</a></li>
-                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.payment.history') }}">@lang('Payments Log')</a></li>
-                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.transactions') }}">@lang('Transactions')</a></li>
-                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.profile.setting') }}">@lang('Profile Setting')</a></li>
-                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.change.password') }}">@lang('Change Password')</a></li>
-                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.twofactor') }}">@lang('2FA Security')</a></li>
-                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link" href="{{ route('user.logout') }}">@lang('Logout')</a></li>
+                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                href="{{ route('user.wallets') }}">@lang('Wallets')</a></li>
+                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                href="{{ route('user.payment.history') }}">@lang('Payments Log')</a></li>
+                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                href="{{ route('user.transactions') }}">@lang('Transactions')</a></li>
+                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                href="{{ route('user.profile.setting') }}">@lang('Profile Setting')</a></li>
+                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                href="{{ route('user.change.password') }}">@lang('Change Password')</a></li>
+                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                href="{{ route('user.twofactor') }}">@lang('2FA Security')</a></li>
+                        <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                href="{{ route('user.logout') }}">@lang('Logout')</a></li>
                     </ul>
                 </li>
                 <li class="header-right flex-align">

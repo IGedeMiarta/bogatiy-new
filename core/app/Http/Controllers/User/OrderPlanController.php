@@ -7,12 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Miner;
 use App\Models\Order;
 use App\Models\Plan;
+use App\Models\ReferralNetwork;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Models\UserCoinBalance;
 use Illuminate\Http\Request;
 
 class OrderPlanController extends Controller {
     public function plans() {
+    
         $pageTitle = "Mining Plans";
         $miners    = Miner::with('activePlans')->whereHas('activePlans')->get();
         return view($this->activeTemplate . 'user.plans.index', compact('pageTitle', 'miners'));
@@ -26,6 +29,28 @@ class OrderPlanController extends Controller {
         ]);
 
         $plan = Plan::active()->with('miner')->findOrFail($request->plan_id);
+        
+        switch ($plan->price) {
+            case 10:
+                $network_lv = 1;
+                break;
+            case 100:
+                $network_lv = 2;
+                break; 
+            case 1000:
+                $network_lv = 3;
+                break;
+            case 5000:
+                $network_lv = 4;
+                break;
+            case 10000:
+                $network_lv = 5;
+                break; 
+            default:
+                $network_lv = 0;
+                break;
+        }
+
         $user = auth()->user();
 
         if ($request->payment_method == 1 && $user->balance < $plan->price) {
@@ -87,6 +112,12 @@ class OrderPlanController extends Controller {
             $transaction->trx          = $order->trx;
             $transaction->save();
 
+            //set referral_networks;
+            $network = new ReferralNetwork();
+            $network->user_id = $user->id;
+            $network->network_lv = $network_lv;
+            $network->save();
+
             notify($user, 'PAYMENT_VIA_USER_BALANCE', [
                 'plan_title'      => $plan->title,
                 'amount'          => showAmount($order->amount),
@@ -107,7 +138,27 @@ class OrderPlanController extends Controller {
     }
     public function miningTracks() {
         $pageTitle = "Mining Tracks";
-        $orders    = Order::where('user_id', auth()->id())->with('miner')->orderBy('id', 'desc')->where('status',1)->paginate(getPaginate());
-        return view($this->activeTemplate . 'user.plans.purchased', compact('pageTitle', 'orders'));
+        $orders     = Order::where('user_id', auth()->id())->with('miner')->orderBy('id', 'desc')->where('status',1)->paginate(getPaginate(1));
+        $isOrder    = Order::where('user_id', auth()->id())->with('miner')->orderBy('id', 'desc')->where('status',1)->count();
+        return view($this->activeTemplate . 'user.plans.purchased', compact('pageTitle', 'orders','isOrder'));
+    }
+
+    function sendRefNetwork($refBy){
+        //level 1
+
+        $user1 = User::with('network')->find($refBy);
+        if($user1){
+            $lv_user = $user1->network->network_lv ?? 0;
+        }
+        $refuser1 = $user1->user1;
+        if($refuser1){
+            $user2 = User::with('network')->find($refuser1);
+        }
+
+        
+        //level 2
+        //level 3
+        //level 4
+        //level 5
     }
 }

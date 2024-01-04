@@ -116,4 +116,7 @@ class User extends Authenticatable {
     public function scopeWithBalance($query) {
         return $query->where('balance', '>', 0);
     }
+    public function network(){
+        return $this->hasOne(ReferralNetwork::class);
+    }
 }
