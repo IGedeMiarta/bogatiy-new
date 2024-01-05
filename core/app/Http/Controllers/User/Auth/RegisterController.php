@@ -47,7 +47,7 @@ class RegisterController extends Controller {
         $mobileCodes  = implode(',', array_column($countryData, 'dial_code'));
         $countries    = implode(',', array_column($countryData, 'country'));
         $validate     = Validator::make($data, [
-            'email'        => 'required|string|email|unique:users',
+            // 'email'        => 'required|string|email|unique:users',
             'mobile'       => 'required|regex:/^([0-9]*)$/',
             'password'     => ['required', 'confirmed', $passwordValidation],
             'username'     => 'required|unique:users|min:6',
@@ -170,12 +170,12 @@ class RegisterController extends Controller {
         $exist['data'] = false;
         $exist['type'] = null;
         if ($request->email) {
-            $exist['data'] = User::where('email', $request->email)->exists();
-            $exist['type'] = 'email';
+            // $exist['data'] = User::where('email', $request->email)->exists();
+            // $exist['type'] = 'email';
         }
         if ($request->mobile) {
-            $exist['data'] = User::where('mobile', $request->mobile)->exists();
-            $exist['type'] = 'mobile';
+            // $exist['data'] = User::where('mobile', $request->mobile)->exists();
+            // $exist['type'] = 'mobile';
         }
         if ($request->username) {
             $exist['data'] = User::where('username', $request->username)->exists();

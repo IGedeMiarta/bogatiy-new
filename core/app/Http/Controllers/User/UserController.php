@@ -11,6 +11,7 @@ use App\Models\Form;
 use App\Models\Miner;
 use App\Models\Referral;
 use App\Models\ReferralLog;
+use App\Models\ReferralNetwork;
 use App\Models\ReferralNetworkLog;
 use App\Models\Transaction;
 use App\Models\UserCoinBalance;
@@ -238,7 +239,7 @@ class UserController extends Controller
 
         $pageTitle = "Referrals Network";
         $referralNetwork = ReferralNetworkLog::where('user_id',auth()->user()->id)->sum('amount');
-        $maxLevel  = Referral::max('level');
+        $maxLevel  = ReferralNetwork::where('user_id',auth()->user()->id)->max('network_lv');
         $relations = [];
         for ($label = 1; $label <= $maxLevel; $label++) {
             $relations[$label] = (@$relations[$label - 1] ? $relations[$label - 1] . '.allReferrals' : 'allReferrals');

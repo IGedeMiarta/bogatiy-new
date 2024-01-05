@@ -5,7 +5,7 @@
             <div class="dashboard-widget flex-align">
                 <span class="dashboard-widget__icon flex-center before-shadow"><span class="icon-Money"></span></span>
                 <div class="dashboard-widget__content">
-                    <span class="dashboard-widget__text">@lang('Referral Network')</span>
+                    <span class="dashboard-widget__text">@lang('Referral Bonuses')</span>
                     <h4 class="dashboard-widget__title">{{ showAmount($referral) }}
                         {{ __($general->cur_text) }}</h4>
                 </div>
