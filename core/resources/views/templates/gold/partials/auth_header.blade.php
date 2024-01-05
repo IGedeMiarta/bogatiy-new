@@ -76,10 +76,12 @@
                                         class="las la-angle-down"></i></span></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
-                                        href="{{ route('user.referral') }}">@lang('My Referral')</a></li>
+                                        href="{{ route('user.referral') }}">@lang('Referral Bonuses')</a></li>
                                 <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
+                                        href="{{ route('user.network') }}">@lang('Referral Network')</a></li>
+                                {{-- <li class="dropdown-menu__list"><a class="dropdown-item dropdown-menu__link"
                                         href="{{ route('user.referral.log') }}">@lang('Referral Bonus Logs')</a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </li>
                     @endif

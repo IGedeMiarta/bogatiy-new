@@ -2,7 +2,8 @@
     $breadcrumb = getContent('breadcrumb.content', true);
 @endphp
 
-<section class="breadcrumb py-120 bg-img" data-background-image="{{ getImage('assets/images/frontend/breadcrumb/' . @$breadcrumb->data_values->image, '1920x420') }}">
+<section class="breadcrumb py-120 bg-img"
+    data-background-image="{{ getImage('assets/images/frontend/breadcrumb/' . @$breadcrumb->data_values->image, '1920x420') }}">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -12,4 +13,5 @@
             </div>
         </div>
     </div>
+
 </section>
