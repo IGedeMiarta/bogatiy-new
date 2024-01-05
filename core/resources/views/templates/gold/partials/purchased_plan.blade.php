@@ -1,6 +1,10 @@
  <style>
      @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 
+     .sans {
+         font-family: Arial, Helvetica, sans-serif;
+     }
+
      *,
      *:before,
      *:after {
@@ -76,7 +80,113 @@
          }
      }
  </style>
- <table class="table table--responsive--md">
+ <div class="row justify-content-center">
+     <div class="col-md-8 mb-4">
+         <div class="card custom--card" style="border-radius: 25px;">
+             <div class="card-body" style="height: 500px">
+                 <h4 class="sans">Miner Logs</h4>
+                 <hr>
+                 <div class="table-responsive">
+                     <table class="table--responsive--md table" style="white-space:nowrap;">
+                         <thead class="sans">
+                             <tr>
+                                 <th>@lang('Date')</th>
+                                 <th>@lang('Amount')</th>
+                                 <th>@lang('Balance')</th>
+                                 <th class="text-start">@lang('Detail')</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             @forelse($transactions as $trx)
+                                 <tr>
+                                     <td>{{ showDateTime($trx->created_at) }}<br>{{ diffForHumans($trx->created_at) }}
+                                     </td>
+                                     <td class="budget">
+                                         <span
+                                             class="fw-bold @if ($trx->trx_type == '+') text--success @else text--danger @endif">
+                                             {{ $trx->trx_type }} {{ showAmount($trx->amount, 8, exceptZeros: true) }}
+                                             {{ strtoupper($trx->currency) }}
+                                         </span>
+                                     </td>
+                                     <td class="budget">
+                                         {{ showAmount($trx->post_balance, 8, exceptZeros: true) }}
+                                         {{ __(strtoupper($trx->currency)) }}
+                                     </td>
+                                     <td class="text-start">{{ __($trx->details) }}</td>
+                                 </tr>
+
+                             @empty
+                                 <tr>
+                                     <td class="text-muted text-center" colspan="100%">{{ __($emptyMessage) }}</td>
+                                 </tr>
+                             @endforelse
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <div class="col-md-4 row ">
+         <div class="col-md-12">
+             <div class="card custom--card" style="border-radius: 25px">
+                 <div class="card-body">
+                     <h4 class="sans">{{ $orders->plan_details->title }}</h4>
+                     <span class="sans">Hashrate</span>
+                     <h5 class="sans">{{ $orders->plan_details->speed }}</h5>
+                     <hr>
+                     <div class="row">
+                         <div class="col">
+                             <span class="sans">Maintance cost</span>
+                             <h5 class="sans">{{ showAmount($orders->maintenance_cost, 0) }}%</h5>
+                         </div>
+                         <div class="col">
+                             <span class="sans">Period</span>
+                             <h5 class="sans">{{ $orders->period_remain }} / {{ $orders->period }} days</h5>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         @php
+             $lastPaid = $orders->last_paid;
+             $nextPaid = getNextPaid($orders->last_paid, 'next');
+             $percent = getNextPaid($orders->last_paid, 'percent');
+             if ($orders->min_return_per_day == $orders->max_return_per_day) {
+                 $rpd = showAmount($orders->min_return_per_day, 8, exceptZeros: true);
+             } else {
+                 $rpd = showAmount($orders->min_return_per_day, 8, exceptZeros: true) . ' - ' . showAmount($orders->max_return_per_day, 8, exceptZeros: true);
+             }
+         @endphp
+         <div class="col-md-12 mt-4">
+             <div class="card custom--card" style="border-radius: 25px">
+                 <div class="card-body">
+                     <div class="row text-center">
+                         <div class="col-md-4">
+                             <img src="{{ getImage(getFilePath('miner') . '/' . @$orders->miner->coin_image, getFileSize('miner')) }}"
+                                 alt="@lang('image')" style="height: 50px; width=50px;">
+                         </div>
+                         <div class="col-md-8">
+                             <span class="sans">Profit in {{ $orders->miner->coin_code }}</span>
+                             <h5 class="sans">{{ $rpd }}</h5>
+                         </div>
+                     </div>
+                     <hr>
+                     <div class="row">
+                         <div class="col-md-12">
+                             <span class="sans">Payout in <i class="p-payIn"></i></span>
+                             <div class="progress">
+                                 <div class="progress-bar" role="progressbar"
+                                     style="width: {{ $percent }}%; background-color:#F7931A" aria-valuenow="25"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+ {{-- <table class="table table--responsive--md">
      <thead>
          <tr>
              <th>@lang('Plan')</th>
@@ -144,7 +254,7 @@
 
  @if ($paginate)
      {{ paginateLinks($orders) }}
- @endif
+ @endif --}}
  <div class="modal custom--modal fade" id="viewModal" role="dialog">
      <div class="modal-dialog" role="document">
          <div class="modal-content rounded-0">
@@ -217,8 +327,18 @@
  @push('script')
      <script>
          'use strict';
-         (function($) {
 
+
+         (function($) {
+             countInterval();
+
+             function countInterval() {
+                 const nextPaid = "{{ $nextPaid }}"
+
+                 var intervalId = setInterval(function() {
+                     payOut(nextPaid);
+                 }, 1000);
+             }
              $('.viewBtn').on('click', function() {
                  var modal = $('#viewModal');
 

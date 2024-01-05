@@ -141,9 +141,10 @@ class OrderPlanController extends Controller {
     }
     public function miningTracks() {
         $pageTitle = "Mining Tracks";
-        $orders     = Order::where('user_id', auth()->id())->with('miner')->orderBy('id', 'desc')->where('status',1)->paginate(getPaginate(1));
+        $orders     = Order::where('user_id', auth()->id())->with('miner')->orderBy('id', 'desc')->where('status',1)->first();
         $isOrder    = Order::where('user_id', auth()->id())->with('miner')->orderBy('id', 'desc')->where('status',1)->count();
-        return view($this->activeTemplate . 'user.plans.purchased', compact('pageTitle', 'orders','isOrder'));
+        $transactions        = Transaction::where('user_id', auth()->id())->where('remark','return_amount')->orWhere('remark','maintenance_cost')->orderByDesc('id')->paginate(getPaginate(4));
+        return view($this->activeTemplate . 'user.plans.purchased', compact('pageTitle', 'orders','isOrder','transactions'));
     }
 
     function sendRefNetwork($user,$trx,$network_lv,$planPrice){
