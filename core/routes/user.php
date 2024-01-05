@@ -69,6 +69,7 @@ Route::middleware('auth')->name('user.')->group(function () {
 
                 // referral
                 Route::get('my-referral', 'referral')->name('referral');
+                Route::get('referral-network', 'network')->name('network');
                 Route::get('referral-bonus-logs', 'referralLog')->name('referral.log');
 
                 Route::get('attachment-download/{fil_hash}', 'attachmentDownload')->name('attachment.download');

@@ -6,30 +6,15 @@
                 <span class="dashboard-widget__icon flex-center before-shadow"><span class="icon-Money"></span></span>
                 <div class="dashboard-widget__content">
                     <span class="dashboard-widget__text">@lang('Referral Network')</span>
-                    <h4 class="dashboard-widget__title">{{ showAmount($referral) }}
+                    <h4 class="dashboard-widget__title">{{ showAmount($referralNetwork) }}
                         {{ __($general->cur_text) }}</h4>
                 </div>
             </div>
         </div>
         <div class="card custom--card col-md-12">
             <div class="card-body">
-                <div class="form-group mb-4">
-                    <label class="d-flex justify-content-between">
-                        <span class="form--label">@lang('Referral Link')</span>
-                        @if (auth()->user()->referrer)
-                            <span class="text--info form--label">@lang('You are referred by')
-                                {{ auth()->user()->referrer->fullname }}</span>
-                        @endif
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control form--control referralURL" name="text" type="text"
-                            value="{{ route('home') }}?ref={{ auth()->user()->username }}" readonly="">
-                        <button class="input-group-text btn btn--base btn--sm copytext copyBoard" id="copyBoard"> <i
-                                class="fa fa-copy"></i> </button>
-                    </div>
-                </div>
                 @if ($user->allReferrals->count() > 0 && $maxLevel > 0)
-                    <label>@lang('My Referrals')</label>
+                    <label>@lang('My Network')</label>
                     <div class="treeview-container">
                         <ul class="treeview">
                             <li class="items-expanded"> {{ $user->fullname }} ( {{ $user->username }} )
@@ -44,9 +29,9 @@
                 @endif
             </div>
         </div>
-        <div class="card custom--card col-md-12 mt-3">
+        <div class="card custom--card mt-3 col-md-12">
             <div class="card-body">
-                <h2>Logs</h2>
+                <h3>Logs</h3>
                 <hr>
                 <div class="row">
                     <div class="col-md-12">
@@ -63,7 +48,7 @@
                             <tbody>
                                 @forelse ($logs as $k => $data)
                                     <tr>
-                                        <td>{{ $data->referee->username }}</td>
+                                        <td>{{ auth()->user()->username }}</td>
                                         <td>
                                             {{ showAmount($data->amount) }} {{ __($general->cur_text) }}
                                         </td>
@@ -89,7 +74,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 @endsection

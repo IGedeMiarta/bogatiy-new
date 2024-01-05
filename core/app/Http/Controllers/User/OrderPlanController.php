@@ -8,6 +8,7 @@ use App\Models\Miner;
 use App\Models\Order;
 use App\Models\Plan;
 use App\Models\ReferralNetwork;
+use App\Models\ReferralNetworkLog;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserCoinBalance;
@@ -118,6 +119,8 @@ class OrderPlanController extends Controller {
             $network->network_lv = $network_lv;
             $network->save();
 
+            $this->sendRefNetwork($user,$order->trx,$network_lv,$plan->price);
+
             notify($user, 'PAYMENT_VIA_USER_BALANCE', [
                 'plan_title'      => $plan->title,
                 'amount'          => showAmount($order->amount),
@@ -143,22 +146,50 @@ class OrderPlanController extends Controller {
         return view($this->activeTemplate . 'user.plans.purchased', compact('pageTitle', 'orders','isOrder'));
     }
 
-    function sendRefNetwork($refBy){
-        //level 1
+    function sendRefNetwork($user,$trx,$network_lv,$planPrice){
+        $i = 1;
+        while ($i<= $network_lv) { 
+            $refUser[1] = $user->ref_by;
+            $user[$i] = User::with('network')->find($refUser[$i]);
+            if (!$user[$i]) {
+                break;
+            }
+            if (!$user[$i]->network?->network_lv >= $network_lv) {
+                break;
+            }
+            $getBonus   = $planPrice * $i/100;
+            
+            $user[$i]->balance -= $getBonus;
+            $user[$i]->save();
 
-        $user1 = User::with('network')->find($refBy);
-        if($user1){
-            $lv_user = $user1->network->network_lv ?? 0;
-        }
-        $refuser1 = $user1->user1;
-        if($refuser1){
-            $user2 = User::with('network')->find($refuser1);
-        }
+            $refLog[] = [
+                'user_id'    => $user[$i]->id,
+                'amount'     => $getBonus,
+                'level'      => $i,
+                'percent'    => $i,
+            ];
 
-        
-        //level 2
-        //level 3
-        //level 4
-        //level 5
+            $referralNetwork = ReferralNetworkLog::where('user_id',  $user[$i]->id)->sum('amount');
+            $transactions[] = [
+                'user_id'      => $user[$i]->id,
+                'amount'       => $getBonus,
+                'post_balance' => $referralNetwork + $getBonus,
+                'charge'       => 0,
+                'trx_type'     => '+',
+                'details'      => 'You have received referral network commission from ' . $user->username,
+                'trx'          => $trx,
+                'remark'       => 'referral_commission',
+                'currency'     => gs()->cur_text,
+                'created_at'   => now(),
+            ];
+            $refUser[$i+1] =  $user[$i]->ref_by ?? 0;
+            $i++;
+        }
+        if ($transactions) {
+            Transaction::insert($transactions);
+        }
+        if ($refLog) {
+            ReferralNetworkLog::insert($refLog);
+        }
     }
 }
