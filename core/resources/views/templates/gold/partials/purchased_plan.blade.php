@@ -224,6 +224,7 @@
 
                  let data = $(this).data();
                  let percent = data.percent;
+                 console.log(percent);
                  let style = '--p:' + percent;
                  $('.range').attr('style', style);
                  const nextPaid = data.next_paid;
