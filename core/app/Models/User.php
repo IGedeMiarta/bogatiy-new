@@ -69,6 +69,9 @@ class User extends Authenticatable {
     public function referrals() {
         return $this->hasMany(User::class, 'ref_by');
     }
+    public function networks() {
+        return $this->hasMany(User::class, 'ref_by');
+    }
 
     public function allReferrals() {
         return $this->referrals()->with('referrer');

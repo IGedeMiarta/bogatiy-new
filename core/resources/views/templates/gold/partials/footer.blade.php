@@ -24,18 +24,24 @@
                     <h4 class="footer-item__title">@lang('Quick Link')</h4>
                     <ul class="footer-menu">
                         @foreach ($pages as $item)
-                            <li class="footer-menu__item"><a href="{{ route('pages', ['slug' => $item->slug]) }}" class="footer-menu__link">{{ __($item->name) }}</a></li>
+                            <li class="footer-menu__item"><a href="{{ route('pages', ['slug' => $item->slug]) }}"
+                                    class="footer-menu__link">{{ __($item->name) }}</a></li>
                         @endforeach
-                        <li class="footer-menu__item"><a href="{{ route('plans') }}" class="footer-menu__link">@lang('Plans') </a></li>
-                        <li class="footer-menu__item"><a href="{{ route('blog') }}" class="footer-menu__link">@lang('Blog')</a></li>
-                        <li class="footer-menu__item"><a href="{{ route('contact') }}" class="footer-menu__link">@lang('Contact')</a></li>
+                        <li class="footer-menu__item"><a href="{{ route('plans') }}"
+                                class="footer-menu__link">@lang('Plans') </a></li>
+                        <li class="footer-menu__item"><a href="{{ route('blog') }}"
+                                class="footer-menu__link">@lang('Blog')</a></li>
+                        <li class="footer-menu__item"><a href="{{ route('contact') }}"
+                                class="footer-menu__link">@lang('Contact')</a></li>
                     </ul>
                 </div>
                 <div class="footer-item">
                     <h4 class="footer-item__title">@lang('Useful Links')</h4>
                     <ul class="footer-menu">
                         @foreach ($policyPages as $page)
-                            <li class="footer-menu__item"><a href="{{ route('policy.pages', [slug($page->data_values->title), $page->id]) }}" class="footer-menu__link">{{ __($page->data_values->title) }}</a></li>
+                            <li class="footer-menu__item"><a
+                                    href="{{ route('policy.pages', [slug($page->data_values->title), $page->id]) }}"
+                                    class="footer-menu__link">{{ __($page->data_values->title) }}</a></li>
                         @endforeach
                     </ul>
                 </div>
@@ -55,7 +61,8 @@
                                 <i class="fas fa-envelope"></i>
                             </span>
                             <div class="content">
-                                <a href="mailto:{{ @$contactCaption->data_values->email_address }}" class="text">{{ @$contactCaption->data_values->email_address }}</a>
+                                <a href="mailto:{{ @$contactCaption->data_values->email_address }}"
+                                    class="text">{{ @$contactCaption->data_values->email_address }}</a>
                             </div>
                         </li>
                         <li class="footer-contact-menu__item">
@@ -63,7 +70,8 @@
                                 <i class="fas fa-phone"></i>
                             </span>
                             <div class="content">
-                                <a href="tel:{{ @$contactCaption->data_values->contact_number }}" class="text">{{ @$contactCaption->data_values->contact_number }}</a>
+                                <a href="tel:{{ @$contactCaption->data_values->contact_number }}"
+                                    class="text">{{ @$contactCaption->data_values->contact_number }}</a>
                             </div>
                         </li>
                     </ul>
@@ -88,7 +96,8 @@
                         </li>
                     @endforeach
                 </ul>
-                <p class="bottom-footer__text fs-18"> &copy; @lang('Copyright') {{ date('Y') }} . @lang('All rights reserved').</p>
+                <p class="bottom-footer__text fs-18"> &copy; @lang('Copyright') {{ '2022' }} . @lang('All rights reserved').
+                </p>
             </div>
         </div>
     </div>

@@ -55,7 +55,7 @@
                         class="icon-Wallet_light"></span></span>
                 <div class="dashboard-widget__content">
                     <span class="dashboard-widget__text">@lang('Referral Network')</span>
-                    <h4 class="dashboard-widget__title">{{ showAmount($referralBonus) }} {{ __($general->cur_text) }}</h4>
+                    <h4 class="dashboard-widget__title">{{ showAmount($referralNetwork) }} {{ __($general->cur_text) }}</h4>
                 </div>
             </div>
         </div>

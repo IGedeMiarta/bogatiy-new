@@ -11,6 +11,8 @@ use App\Models\Form;
 use App\Models\Miner;
 use App\Models\Referral;
 use App\Models\ReferralLog;
+use App\Models\ReferralNetwork;
+use App\Models\ReferralNetworkLog;
 use App\Models\Transaction;
 use App\Models\UserCoinBalance;
 use Illuminate\Http\Request;
@@ -22,6 +24,7 @@ class UserController extends Controller
         $pageTitle     = 'Dashboard';
         $user          = auth()->user();
         $referralBonus = ReferralLog::where('referee_id', $user->id)->sum('amount');
+        $referralNetwork = ReferralNetworkLog::where('user_id', $user->id)->sum('amount');
 
         $miners = Miner::with(['userCoinBalances' => function ($q) {
             return $q->where('user_id', auth()->id());
@@ -31,7 +34,7 @@ class UserController extends Controller
 
         $transactions = Transaction::where('user_id', $user->id)->orderBy('id', 'desc')->limit(10)->get();
 
-        return view($this->activeTemplate . 'user.dashboard', compact('pageTitle', 'referralBonus', 'miners', 'transactions', 'user'));
+        return view($this->activeTemplate . 'user.dashboard', compact('pageTitle', 'referralBonus', 'miners', 'transactions', 'user','referralNetwork'));
     }
 
     public function paymentHistory(Request $request)
@@ -208,12 +211,12 @@ class UserController extends Controller
     public function referral()
     {
         $general = gs();
-
+        $user = auth()->user();
         if (!$general->referral_system) {
             $notify[] = ['error', 'Sorry, the referral system is currently unavailable'];
             return back()->withNotify($notify);
         }
-
+        $referral = ReferralLog::where('referee_id', $user->id)->sum('amount');
         $pageTitle = "Referrals";
         $maxLevel  = Referral::max('level');
         $relations = [];
@@ -221,7 +224,29 @@ class UserController extends Controller
             $relations[$label] = (@$relations[$label - 1] ? $relations[$label - 1] . '.allReferrals' : 'allReferrals');
         }
         $user = auth()->user()->load($relations);
-        return view($this->activeTemplate . 'user.referral.index', compact('pageTitle', 'user', 'maxLevel'));
+        $logs      = ReferralLog::where('referee_id', auth()->id())->with('referee')->orderBy('id', 'desc')->paginate(getPaginate());
+        return view($this->activeTemplate . 'user.referral.index', compact('pageTitle', 'user', 'maxLevel','logs','referral'));
+    }
+
+    public function network()
+    {
+        $general = gs();
+
+        if (!$general->referral_system) {
+            $notify[] = ['error', 'Sorry, the referral system is currently unavailable'];
+            return back()->withNotify($notify);
+        }
+
+        $pageTitle = "Referrals Network";
+        $referralNetwork = ReferralNetworkLog::where('user_id',auth()->user()->id)->sum('amount');
+        $maxLevel  = ReferralNetwork::where('user_id',auth()->user()->id)->max('network_lv');
+        $relations = [];
+        for ($label = 1; $label <= $maxLevel; $label++) {
+            $relations[$label] = (@$relations[$label - 1] ? $relations[$label - 1] . '.allReferrals' : 'allReferrals');
+        }
+        $user = auth()->user()->load($relations);
+        $logs      = ReferralNetworkLog::where('user_id', auth()->id())->with('referee')->orderBy('id', 'desc')->paginate(getPaginate());
+        return view($this->activeTemplate . 'user.referral.network', compact('pageTitle', 'user', 'maxLevel','logs','referralNetwork'));
     }
 
     public function referralLog()
