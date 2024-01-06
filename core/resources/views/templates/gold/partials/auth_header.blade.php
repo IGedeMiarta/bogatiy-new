@@ -37,7 +37,11 @@
             <div class="navbar-collapse collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav nav-menu align-items-lg-center ms-auto">
                     @if ($miningStatus)
-                        <li class="nav-item dropdown">
+                        <li class="nav-item">
+                            <a class="nav-link @if (Route::is('user.plans')) active @endif" aria-current="page"
+                                href="{{ route('user.plans') }}">@lang('Start Mining')</a>
+                        </li>
+                        {{-- <li class="nav-item dropdown">
                             <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button"
                                 aria-expanded="false"> @lang('Mining') <span class="nav-item__icon"><i
                                         class="las la-angle-down"></i></span></a>
@@ -48,7 +52,7 @@
                                         href="{{ route('user.plans.purchased') }}">@lang('Mining Tracks')</a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
                     @else
                         <li class="nav-item">
                             <a class="nav-link @if (Route::is('user.plans.purchased')) active @endif" aria-current="page"

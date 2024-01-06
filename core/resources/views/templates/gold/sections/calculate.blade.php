@@ -1,7 +1,9 @@
 @php
     $calculate = getContent('calculate.content', true);
     $miners = App\Models\Miner::with('plans')
-        ->whereHas('plans')
+        ->whereHas('plans', function ($query) {
+            $query->where('status', 1);
+        })
         ->orderBy('name', 'ASC')
         ->get();
 @endphp
@@ -21,7 +23,9 @@
                                     <select class="select form--control" id="select-coin" name="miner">
                                         <option value="" disabled>@lang('Select Coin')</option>
                                         @foreach ($miners as $miner)
-                                            <option data-coin_code="{{ strtoupper($miner->coin_code) }}" data-plans="{{ $miner->plans }}" value="{{ $miner->id }}" @selected($loop->first)>{{ __($miner->name) }}</option>
+                                            <option data-coin_code="{{ strtoupper($miner->coin_code) }}"
+                                                data-plans="{{ $miner->plans }}" value="{{ $miner->id }}"
+                                                @selected($loop->first)>{{ __($miner->name) }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -51,14 +55,16 @@
             $('select[name="miner"]').on('change', function() {
                 var plans = $(this).find(':selected').data('plans');
                 var coin_code = $(this).find(':selected').data('coin_code');
-                var output = `<select class="revenue-calculate"> <option value="" disabled>@lang('Select Plan')</option>`;
+                var output =
+                    `<select class="revenue-calculate"> <option value="" disabled>@lang('Select Plan')</option>`;
 
                 if (plans?.length != 0) {
                     $.each(plans, function(key, plan) {
                         var period = totalPeriodInDay(plan.period, plan.period_unit);
                         var per_day = 0;
                         if (plan.max_return_per_day) {
-                            per_day = period * parseFloat(plan.min_return_per_day) + ' - ' + period * parseFloat(plan.max_return_per_day);
+                            per_day = period * parseFloat(plan.min_return_per_day) + ' - ' + period *
+                                parseFloat(plan.max_return_per_day);
                         } else {
                             per_day = period * parseFloat(plan.min_return_per_day);
                         }
