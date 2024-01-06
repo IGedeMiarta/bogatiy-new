@@ -149,6 +149,8 @@ class OrderPlanController extends Controller {
 
     function sendRefNetwork($user,$trx,$network_lv,$planPrice){
         $i = 1;
+        $transactions = [];
+        $refLog = [];
         while ($i<= $network_lv) { 
             $refUser[1] = $user->ref_by;
             $user[$i] = User::with('network')->find($refUser[$i]);
