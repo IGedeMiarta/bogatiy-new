@@ -2,7 +2,8 @@
     $testimonialContent = getContent('testimonial.content', true);
     $testimonials = getContent('testimonial.element', orderById: true);
 @endphp
-<section class="testimonials py-120 bg-img" data-background-image="{{ asset($activeTemplateTrue . 'images/thumbs/testimonial-bg.png') }}">
+<section class="testimonials py-120 bg-img"
+    data-background-image="{{ asset($activeTemplateTrue . 'images/thumbs/testimonial-bg.png') }}">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
@@ -17,12 +18,14 @@
                 <div class="testimonails-card">
                     <div class="testimonial-item flex-wrap">
                         <div class="testimonial-item__thumb">
-                            <img src="{{ getImage('assets/images/frontend/testimonial/' . @$testimonial->data_values->image) }}" class="fit-image" alt="@lang('image')">
+                            <img src="{{ getImage('assets/images/frontend/testimonial/' . @$testimonial->data_values->image) }}"
+                                class="fit-image" alt="@lang('image')">
                         </div>
                         <div class="testimonial-item__content">
                             <div class="testimonial-item__info">
                                 <h5 class="testimonial-item__name"> {{ __($testimonial->data_values->author) }}</h5>
-                                <span class="testimonial-item__designation fs-14"> {{ __($testimonial->data_values->designation) }}</span>
+                                <span class="testimonial-item__designation fs-14">
+                                    {{ __($testimonial->data_values->designation) }}</span>
                             </div>
                             <p class="testimonial-item__desc">{{ __($testimonial->data_values->quote) }}</p>
                         </div>

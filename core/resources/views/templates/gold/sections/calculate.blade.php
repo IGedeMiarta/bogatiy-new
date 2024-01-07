@@ -6,18 +6,19 @@
         })
         ->orderBy('name', 'ASC')
         ->get();
+    // dd($miners);
 @endphp
 
 
 <section class="calculator pt-120">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="calculator-content">
+            <div class="col-md-8 mb-5">
+                <div class="calculator-content" style="height: 250px">
                     <h3 class="calculator-content__title text-center">{{ __(@$calculate->data_values->heading) }}</h3>
-                    <div class="calculator-content__inner flex-wrap align-items-end">
-                        <form action="#" class="calculator-content__form">
-                            <div class="row gy-3">
+                    <div class="calculator-content__inner">
+                        <form action="#" class="">
+                            <div class="row ">
                                 <div class="col-sm-6 col-xsm-6">
                                     <label for="select-coin" class="form--label">@lang('Select Coin')</label>
                                     <select class="select form--control" id="select-coin" name="miner">
@@ -37,9 +38,21 @@
                                 </div>
                             </div>
                         </form>
-                        <div class="calculator-content__revenue  revenue-area">
+                        {{-- <div class="calculator-content__revenue  revenue-area">
                             <span class="text text--gradient fw-bold banner-calculator__text"></span>
                             <h2 class="mb-0 banner-calculator__number">0</h2>
+                        </div> --}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="calculator-content" style="height: 250px">
+                    <h4 class="calculator-content__title text-center ">@lang('Estimated Daily Revenue')</h4>
+                    <hr>
+                    <div class="calculator-content__inner mt-5">
+                        <div class="revenue-area text-center">
+                            <h3 class="mb-0 banner-calculator__number text--gradient">0</h3>
+                            <h3 class="mb-0 banner-calculator__coin_code text--gradient">BTC</h3>
                         </div>
                     </div>
                 </div>
@@ -63,13 +76,15 @@
                         var period = totalPeriodInDay(plan.period, plan.period_unit);
                         var per_day = 0;
                         if (plan.max_return_per_day) {
-                            per_day = period * parseFloat(plan.min_return_per_day) + ' - ' + period *
-                                parseFloat(plan.max_return_per_day);
-                        } else {
-                            per_day = period * parseFloat(plan.min_return_per_day);
-                        }
+                            let a = trimTrailingZeros(plan.min_return_per_day)
+                            let b = trimTrailingZeros(plan.max_return_per_day)
+                            per_day = a + ' - ' + b
 
-                        output += `<option value="${per_day} ${coin_code}"> ${plan.title} </option>`;
+                        } else {
+                            per_day = trimTrailingZeros(plan.max_return_per_day)
+
+                        }
+                        output += `<option value="${per_day}"> ${plan.title} </option>`;
                     });
 
                     output += '</select>'
@@ -77,7 +92,7 @@
                     $('.plans').html(output);
                 }
 
-                $('.revenue-area .sub-title').hide('slow')
+                // $('.revenue-area .sub-title').hide('slow')
                 $('.revenue-area .title').hide('slow')
                 $('.revenue-calculate').change();
             }).change();
@@ -99,10 +114,22 @@
             }
 
             $(document).on('change', '.revenue-calculate', function() {
-                console.log($(this).val())
-                $('.revenue-area .banner-calculator__text').text(`@lang('Estimated Revenue')`).hide().show();
+                $('.revenue-area .banner-calculator__text').text(`@lang('Estimated Daily Revenue')`).show();
                 $('.revenue-area .banner-calculator__number').text($(this).val()).hide().show();
             });
+
+            function trimTrailingZeros(number) {
+                // Convert the number to a string to remove trailing zeros
+                let trimmedNumber = number.toString();
+
+                // Remove trailing zeros after the decimal point
+                if (trimmedNumber.includes('.')) {
+                    trimmedNumber = trimmedNumber.replace(/0+$/, '');
+                }
+
+                return trimmedNumber;
+            }
+
         })(jQuery)
     </script>
 @endpush

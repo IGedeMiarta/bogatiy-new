@@ -45,11 +45,11 @@
                                     <div class="pricing-item__body">
                                         <ul class="text-list">
 
-                                            <li class="text-list__item fs-18">@lang('Return per day:')
-                                                {{ showAmount($plan->min_return_per_day) }}
+                                            <li class="text-list__item fs-18">@lang('Return per day:') <br>
+                                                {{ showAmount($plan->min_return_per_day, 8, true, true) }}
                                                 {{ strtoupper($item->coin_code) }}
                                                 @if ($plan->max_return_per_day)
-                                                    - {{ showAmount($plan->max_return_per_day) }}
+                                                    - {{ showAmount($plan->max_return_per_day, 8, true, true) }}
                                                     {{ strtoupper($item->coin_code) }}
                                                 @endif
                                             </li>

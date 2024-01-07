@@ -23,6 +23,7 @@
                             </thead>
                             <tbody class="list">
                                 @forelse($plans as $plan)
+                                    @dd($plan->returnPerDay)
                                     <tr>
                                         <td> {{ $plans->firstItem() + $loop->index }}</td>
                                         <td> {{ __($plan->title) }} </td>
@@ -38,7 +39,8 @@
                                             @endphp
                                         </td>
                                         <td>
-                                            <button class="btn btn-outline--primary btn-sm editBtn" data-plan="{{ $plan }}">
+                                            <button class="btn btn-outline--primary btn-sm editBtn"
+                                                data-plan="{{ $plan }}">
                                                 <i class="la la-pencil"></i>@lang('Edit')
                                             </button>
                                         </td>
@@ -78,14 +80,16 @@
                         <div class="row">
                             <div class="form-group col-lg-6">
                                 <label>@lang('Title')</label>
-                                <input class="form-control" name="title" type="text" value="{{ old('title') }}" placeholder="@lang('Enter Plan Title')" required />
+                                <input class="form-control" name="title" type="text" value="{{ old('title') }}"
+                                    placeholder="@lang('Enter Plan Title')" required />
                             </div>
                             <div class="form-group col-lg-6">
                                 <label>@lang('Miner')</label>
                                 <select class="form-control" name="miner">
                                     <option value="">@lang('Select One')</option>
                                     @foreach ($miners as $miner)
-                                        <option data-coin_code={{ $miner->coin_code }} value="{{ $miner->id }}" @selected($miner->id == old('miner'))> {{ __($miner->name) }}</option>
+                                        <option data-coin_code={{ $miner->coin_code }} value="{{ $miner->id }}"
+                                            @selected($miner->id == old('miner'))> {{ __($miner->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -94,7 +98,8 @@
                                 <label>@lang('Price')</label>
                                 <div class="input-group">
                                     <span class="input-group-text">{{ $general->cur_sym }}</span>
-                                    <input class="form-control" name="price" type="number" value="{{ old('price') }}" step="any" placeholder="@lang('Enter Price')" required />
+                                    <input class="form-control" name="price" type="number" value="{{ old('price') }}"
+                                        step="any" placeholder="@lang('Enter Price')" required />
                                 </div>
                             </div>
 
@@ -110,7 +115,9 @@
                                 <div class="form-group">
                                     <label>@lang('Return Amount /Day')</label>
                                     <div class="input-group">
-                                        <input class="form-control" name="return_per_day" type="number" value="{{ old('return_per_day') }}" step="any" placeholder="@lang('Enter Return Per Day')" required />
+                                        <input class="form-control" name="return_per_day" type="number"
+                                            value="{{ old('return_per_day') }}" step="any"
+                                            placeholder="@lang('Enter Return Per Day')" required />
                                         <span class="input-group-text rpd_cur_sym">{{ $general->cur_text }}</span>
                                     </div>
                                 </div>
@@ -119,7 +126,8 @@
                             <div class="form-group col-lg-4">
                                 <label>@lang('Speed')</label>
                                 <div class="input-group">
-                                    <input class="form-control" name="speed" type="number" step="any" placeholder="@lang('Enter Speed Value')" required />
+                                    <input class="form-control" name="speed" type="number" step="any"
+                                        placeholder="@lang('Enter Speed Value')" required />
                                     <select class="input-group-text" name="speed_unit">
                                         <option value="0">@lang('hash/s')</option>
                                         <option value="1">@lang('Khash/s')</option>
@@ -136,7 +144,8 @@
                             <div class="form-group col-lg-4">
                                 <label>@lang('Period')</label>
                                 <div class="input-group">
-                                    <input class="form-control" name="period" type="number" step="any" placeholder="@lang('Enter Period Value')" required />
+                                    <input class="form-control" name="period" type="number" step="any"
+                                        placeholder="@lang('Enter Period Value')" required />
                                     <select class="input-group-text" name="period_unit">
                                         <option value="0" @selected(old('period') == 0)>@lang('Day')</option>
                                         <option value="1" @selected(old('period') == 1)>@lang('Month')</option>
@@ -147,7 +156,8 @@
                             <div class="form-group col-lg-4">
                                 <label>@lang('Maintenance Cost')</label>
                                 <div class="input-group">
-                                    <input class="form-control" name="maintenance_cost" type="number" step="any" value="{{ old('maintenance_cost') }}" required />
+                                    <input class="form-control" name="maintenance_cost" type="number" step="any"
+                                        value="{{ old('maintenance_cost') }}" required />
                                     <span class="input-group-text">@lang('% per day')</span>
                                 </div>
                             </div>
@@ -187,14 +197,16 @@
                         <div class="row">
                             <div class="form-group col-lg-6">
                                 <label>@lang('Title')</label>
-                                <input class="form-control" name="title" type="text" value="{{ old('title') }}" placeholder="@lang('Enter Plan Title')" required />
+                                <input class="form-control" name="title" type="text" value="{{ old('title') }}"
+                                    placeholder="@lang('Enter Plan Title')" required />
                             </div>
                             <div class="form-group col-lg-6">
                                 <label>@lang('Miner')</label>
                                 <select class="form-control" name="miner">
                                     <option value="">@lang('Select One')</option>
                                     @foreach ($miners as $miner)
-                                        <option data-coin_code={{ $miner->coin_code }} value="{{ $miner->id }}" @selected(old('miner') == $miner->id)> {{ __($miner->name) }}</option>
+                                        <option data-coin_code={{ $miner->coin_code }} value="{{ $miner->id }}"
+                                            @selected(old('miner') == $miner->id)> {{ __($miner->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -203,7 +215,9 @@
                                 <label>@lang('Price')</label>
                                 <div class="input-group">
                                     <span class="input-group-text">{{ $general->cur_sym }}</span>
-                                    <input class="form-control" name="price" type="number" value="{{ old('price') }}" step="any" placeholder="@lang('Enter Price')" required />
+                                    <input class="form-control" name="price" type="number"
+                                        value="{{ old('price') }}" step="any" placeholder="@lang('Enter Price')"
+                                        required />
                                 </div>
                             </div>
 
@@ -219,7 +233,9 @@
                                 <div class="form-group">
                                     <label>@lang('Return Amount /Day')</label>
                                     <div class="input-group">
-                                        <input class="form-control" name="return_per_day" type="number" value="{{ old('return_per_day') }}" step="any" placeholder="@lang('Enter Return Per Day')" required />
+                                        <input class="form-control" name="return_per_day" type="number"
+                                            value="{{ old('return_per_day') }}" step="any"
+                                            placeholder="@lang('Enter Return Per Day')" required />
                                         <span class="input-group-text rpd_cur_sym">{{ $general->cur_text }}</span>
                                     </div>
                                 </div>
@@ -228,7 +244,8 @@
                             <div class="form-group col-lg-4">
                                 <label>@lang('Speed')</label>
                                 <div class="input-group">
-                                    <input class="form-control" name="speed" type="number" step="any" placeholder="@lang('Enter Speed Value')" required />
+                                    <input class="form-control" name="speed" type="number" step="any"
+                                        placeholder="@lang('Enter Speed Value')" required />
                                     <select class="input-group-text" name="speed_unit">
                                         <option value="0">@lang('hash/s')</option>
                                         <option value="1">@lang('Khash/s')</option>
@@ -245,7 +262,8 @@
                             <div class="form-group col-lg-4">
                                 <label>@lang('Period')</label>
                                 <div class="input-group">
-                                    <input class="form-control" name="period" type="number" step="any" placeholder="@lang('Enter Period Value')" required />
+                                    <input class="form-control" name="period" type="number" step="any"
+                                        placeholder="@lang('Enter Period Value')" required />
                                     <select class="input-group-text" name="period_unit">
                                         <option value="0" @selected(old('period') == 0)>@lang('Day')</option>
                                         <option value="1" @selected(old('period') == 1)>@lang('Month')</option>
@@ -256,7 +274,8 @@
                             <div class="form-group col-lg-4">
                                 <label>@lang('Maintenance Cost')</label>
                                 <div class="input-group">
-                                    <input class="form-control" name="maintenance_cost" type="number" step="any" required />
+                                    <input class="form-control" name="maintenance_cost" type="number" step="any"
+                                        required />
                                     <span class="input-group-text">@lang('% per day')</span>
                                 </div>
                             </div>
@@ -275,7 +294,9 @@
 
                         <div class="form-group">
                             <label>@lang('Status')</label>
-                            <input name="status" data-width="100%" data-size="large" data-onstyle="-success" data-offstyle="-danger" data-bs-toggle="toggle" data-height="35" data-on="@lang('Active')" data-off="@lang('Inactive')" type="checkbox">
+                            <input name="status" data-width="100%" data-size="large" data-onstyle="-success"
+                                data-offstyle="-danger" data-bs-toggle="toggle" data-height="35"
+                                data-on="@lang('Active')" data-off="@lang('Inactive')" type="checkbox">
                         </div>
 
                         <button class="btn btn-block btn--primary w-100 h-45" type="submit">@lang('Submit')</button>
@@ -287,11 +308,13 @@
 @endsection
 
 @push('breadcrumb-plugins')
-    <button class="btn btn-outline--primary @if (request()->routeIs('admin.plan.index')) h-45 @else btn-sm @endif addBtn"><i class="las la-plus"></i>@lang('Add New')</button>
+    <button class="btn btn-outline--primary @if (request()->routeIs('admin.plan.index')) h-45 @else btn-sm @endif addBtn"><i
+            class="las la-plus"></i>@lang('Add New')</button>
     @if (request()->routeIs('admin.plan.index'))
         <x-search-form placeholder="Search by title/Miner" />
     @else
-        <a class="btn btn-sm btn-outline--dark" href="{{ route('admin.miner.index') }}"><i class="las la-undo"></i>@lang('Back')</a>
+        <a class="btn btn-sm btn-outline--dark" href="{{ route('admin.miner.index') }}"><i
+                class="las la-undo"></i>@lang('Back')</a>
     @endif
 @endpush
 
@@ -431,7 +454,8 @@
                                 </div>
                             `).hide().show();
                 }
-                var coinCode = $(this).parents('.modal-body').find('select[name=miner]').find(':selected').attr('data-coin_code');
+                var coinCode = $(this).parents('.modal-body').find('select[name=miner]').find(':selected').attr(
+                    'data-coin_code');
                 $(this).parents('.modal-body').find('.rpd_cur_sym').text(coinCode);
             });
         })(jQuery)
