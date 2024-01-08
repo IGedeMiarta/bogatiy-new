@@ -62,16 +62,49 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="pricing-item__footer">
-                                    @guest
-                                        <a class="btn btn-outline--base btn--md"
-                                            href="{{ route('user.login') }}">@lang('Buy Now')</a>
-                                    @else
-                                        <button class="btn btn-outline--base btn--md pill buy-plan"
-                                            data-id="{{ $plan->id }}" data-title="{{ $plan->title }}"
-                                            data-price="{{ showAmount($plan->price) }}"
-                                            type="button">@lang('Buy Now')</button>
-                                    @endguest
+                                <div class="">
+                                    <div class="d-grid mt-3 mb-3">
+                                        @switch($plan->price)
+                                            @case(10)
+                                                <a class="btn btn-outline--base btn--md mb-n2" target="_blank"
+                                                    href="https://www.asicminervalue.com/miners/jasminer/x16-p">@lang('Check Mechine')</a>
+                                            @break
+
+                                            @case(100)
+                                                <a class="btn btn-outline--base btn--md mb-n2" target="_blank"
+                                                    href="https://www.asicminervalue.com/miners/microbt/whatsminer-m63s">@lang('Check Mechine')</a>
+                                            @break
+
+                                            @case(1000)
+                                                <a class="btn btn-outline--base btn--md mb-n2" target="_blank"
+                                                    href="https://www.asicminervalue.com/miners/ipollo/g1">@lang('Check Mechine')</a>
+                                            @break
+
+                                            @case(5000)
+                                                <a class="btn btn-outline--base btn--md mb-n2" target="_blank"
+                                                    href="https://www.asicminervalue.com/miners/iceriver/ks3">@lang('Check Mechine')</a>
+                                            @break
+
+                                            @case(10000)
+                                                <a class="btn btn-outline--base btn--md mb-n2" target="_blank"
+                                                    href="https://www.asicminervalue.com/miners/bitmain/antminer-ks3-9-4th">@lang('Check Mechine')</a>
+                                            @break
+
+                                            @default
+                                        @endswitch
+
+                                        <br>
+                                        @guest
+                                            <a class="btn btn-outline--base btn--md mt-n2"
+                                                href="{{ route('user.login') }}">@lang('Buy Now')</a>
+                                        @else
+                                            <button class="btn btn-outline--base btn--md buy-plan mt-n2"
+                                                data-id="{{ $plan->id }}" data-title="{{ $plan->title }}"
+                                                data-price="{{ showAmount($plan->price) }}"
+                                                type="button">@lang('Buy Now')</button>
+                                        @endguest
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +114,6 @@
         @endforeach
     </div>
 </div>
-
 @auth
     @include($activeTemplate . 'partials.buy_plan_modal')
 @endauth
