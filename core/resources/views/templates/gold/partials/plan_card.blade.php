@@ -67,27 +67,27 @@
                                         @switch($plan->price)
                                             @case(10)
                                                 <a class="btn btn-outline--base btn--md mb-n2" target="_blank"
-                                                    href="https://www.asicminervalue.com/miners/jasminer/x16-p">@lang('Check Mechine')</a>
+                                                    href="https://www.asicminervalue.com/miners/jasminer/x16-p">@lang('Check Machine')</a>
                                             @break
 
                                             @case(100)
                                                 <a class="btn btn-outline--base btn--md mb-n2" target="_blank"
-                                                    href="https://www.asicminervalue.com/miners/microbt/whatsminer-m63s">@lang('Check Mechine')</a>
+                                                    href="https://www.asicminervalue.com/miners/microbt/whatsminer-m63s">@lang('Check Machine')</a>
                                             @break
 
                                             @case(1000)
                                                 <a class="btn btn-outline--base btn--md mb-n2" target="_blank"
-                                                    href="https://www.asicminervalue.com/miners/ipollo/g1">@lang('Check Mechine')</a>
+                                                    href="https://www.asicminervalue.com/miners/ipollo/g1">@lang('Check Machine')</a>
                                             @break
 
                                             @case(5000)
                                                 <a class="btn btn-outline--base btn--md mb-n2" target="_blank"
-                                                    href="https://www.asicminervalue.com/miners/iceriver/ks3">@lang('Check Mechine')</a>
+                                                    href="https://www.asicminervalue.com/miners/iceriver/ks3">@lang('Check Machine')</a>
                                             @break
 
                                             @case(10000)
                                                 <a class="btn btn-outline--base btn--md mb-n2" target="_blank"
-                                                    href="https://www.asicminervalue.com/miners/bitmain/antminer-ks3-9-4th">@lang('Check Mechine')</a>
+                                                    href="https://www.asicminervalue.com/miners/bitmain/antminer-ks3-9-4th">@lang('Check Machine')</a>
                                             @break
 
                                             @default
