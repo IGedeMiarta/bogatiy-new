@@ -23,7 +23,6 @@
                             </thead>
                             <tbody class="list">
                                 @forelse($plans as $plan)
-                                    @dd($plan->returnPerDay)
                                     <tr>
                                         <td> {{ $plans->firstItem() + $loop->index }}</td>
                                         <td> {{ __($plan->title) }} </td>
